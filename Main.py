@@ -119,14 +119,47 @@ def Conta():
                   +'3- preço do produto')
             opAlterProduto = int(input('--> '))
             time.sleep(2)
-             
-            query ="UPDATE carros SET nome_dono = 'Joaquim' WHERE placa = 'ABC-1234'"
-            cnx.commit()
 
-                 
+            if opAlterProduto == 1:
+
+                upName = input('Digite o nome:')
+                time.sleep(2)
+                upId = int(input('Informe o id do produto:'))
+
+                query ="UPDATE produto SET nome = '%s' WHERE idP = '%d'"
+                dados = (upName,upId)
+                cursor.execute(query,dados)
+                cnx.commit()
+
+            if opAlterProduto == 2:
+
+                upEstoque = int(input('Digite a quantidade de estoque:'))
+                time.sleep(2)
+                upId = int(input('Informe o id do produto:'))
+
+                query ="UPDATE produto SET qtd_estoque = '%d' WHERE idP = '%d'"
+                dados = (upEstoque,upId)
+                cursor.execute(query,dados)
+                cnx.commit()
+             
+            if opAlterProduto == 3:
+
+                upPreco = int(input('Digite o preço:'))
+                time.sleep(2)
+                upId = int(input('Informe o id do produto:'))
+
+                query ="UPDATE produto SET preco = '%d' WHERE idP = '%d'"
+                dados = (upPreco,upId)
+                cursor.execute(query,dados)
+                cnx.commit()
+
         if opProdutoPedido == 4:
 
-            cursor.execute("DELETE FROM carros WHERE placa = 'ABC-1234'")
+            delProd = int(input('Digite o id do produto que deseja deletar: '))
+
+            cursor.execute("DELETE FROM carros WHERE idP = '%d'")
+            dados = (delProd)
+            cursor.execute(query,dados)
             cnx.commit()
 
         if opProdutoPedido == 5:
@@ -168,14 +201,53 @@ def Conta():
             print("\033[1;33m CARREGANDO.... \033[0;0m")
             time.sleep(6)
 
-            print('Preço do produto:\n')
-            precoProd = int(input('--> '))
+            print('O que você deseja alterar?\n'
+                  +'1- nome do produto'
+                  +'2- quntidade de estoque'
+                  +'3- preço do produto')
+            opAlterProduto = int(input('--> '))
             time.sleep(2)
+
+            if opAlterProduto == 1:
+
+                upCliente = input('Digite o nome do cliente:')
+                time.sleep(2)
+                upId = int(input('Informe o id do pedido:'))
+
+                query ="UPDATE produto SET nome_cliente = '%s' WHERE idPe = '%d'"
+                dados = (upCliente,upId)
+                cursor.execute(query,dados)
+                cnx.commit()
+
+            if opAlterProduto == 2:
+
+                upValor = int(input('Digite o valor total:'))
+                time.sleep(2)
+                upId = int(input('Informe o id do pedido:'))
+
+                query ="UPDATE produto SET valor_total = '%d' WHERE idPe = '%d'"
+                dados = (upValor,upId)
+                cursor.execute(query,dados)
+                cnx.commit()
              
-            query ="UPDATE carros SET nome_dono = 'Joaquim' WHERE placa = 'ABC-1234'"
-            cnx.commit()
+            if opAlterProduto == 3:
+
+                upstatus = int(input('Digite true ou false para o status:'))
+                time.sleep(2)
+                upId = int(input('Informe o id do pedido:'))
+
+                query ="UPDATE produto SET statusPe = '%b' WHERE idPe = '%d'"
+                dados = (upstatus,upId)
+                cursor.execute(query,dados)
+                cnx.commit()
+
 
         if opProdutoPedido == 8:
 
-            cursor.execute("DELETE FROM carros WHERE placa = 'ABC-1234'")
+           
+            delPedido = int(input('Digite o id do pedido que deseja deletar: '))
+
+            cursor.execute("DELETE FROM carros WHERE idPe = '%d'")
+            dados = (delPedido)
+            cursor.execute(query,dados)
             cnx.commit()
