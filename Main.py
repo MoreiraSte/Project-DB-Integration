@@ -113,8 +113,11 @@ def Conta():
             print("\033[1;33m CARREGANDO.... \033[0;0m")
             time.sleep(6)
 
-            print('Preço do produto:\n')
-            precoProd = int(input('--> '))
+            print('O que você deseja alterar?\n'
+                  +'1- nome do produto'
+                  +'2- quntidade de estoque'
+                  +'3- preço do produto')
+            opAlterProduto = int(input('--> '))
             time.sleep(2)
              
             query ="UPDATE carros SET nome_dono = 'Joaquim' WHERE placa = 'ABC-1234'"
