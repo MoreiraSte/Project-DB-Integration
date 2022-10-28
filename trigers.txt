@@ -1,0 +1,27 @@
+- info_log pedido cadastrado trigger:
+
+	CREATE DEFINER = CURRENT_USER TRIGGER `stephany_moreira`.`pedido_AFTER_INSERT` AFTER INSERT ON `pedido` FOR EACH ROW
+BEGIN
+	insert into Info_Log values(null,now(), (select concat(nome_cliente , ' ', valor_total, ' ',statusPe)));
+END
+
+- info_log pedido excluido trigger:
+
+	CREATE DEFINER=`root`@`localhost` TRIGGER `pedido_BEFORE_DELETE` BEFORE DELETE ON `pedido` FOR EACH ROW BEGIN
+  delete from pedido_itens where fk_pedido = old.idPe;
+	insert into Info_Log values(null,now(), (select concat(old.nome_cliente , ' ', old.valor_total, ' ',old.statusPe)));
+    
+END
+
+- info_log produto cadastrado trigger:
+
+	CREATE DEFINER=`root`@`%` TRIGGER `produto_AFTER_INSERT` AFTER INSERT ON `produto` FOR EACH ROW BEGIN
+	insert into Info_Log values(null,now(), (select concat(nome , ' ', qtd_estoque, ' ',preco)));
+END
+
+- info_log produto excluido trigger:
+	
+	CREATE DEFINER=`root`@`%` TRIGGER `produto_BEFORE_DELETE` BEFORE DELETE ON `produto` FOR EACH ROW BEGIN
+ delete from produto where idP = old.idP;
+	insert into Info_Log values(null,now(), (select concat(old.nome , ' ', old.qtd_estoque, ' ',old.preco)));
+END
