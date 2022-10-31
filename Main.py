@@ -22,7 +22,7 @@ def Conta():
                                     "\n  \033[1;32m[9]\033[0;0m - Aumentar o preço dos produtos"
                                     "\n  \033[1;32m[10]\033[0;0m - Diminuir o preço dos produtos"
                                     "\n  \033[1;32m[11]\033[0;0m - Valor total dos pedidos"
-                                    
+                                    "\n  \033[1;32m[12]\033[0;0m - Finalizar"
 
                                     
                                     "\n\n  \033[1;32m-->\033[0;0m "))
@@ -245,21 +245,38 @@ def Conta():
             time.sleep(2)
                
             
-        # if opProdutoPedido == 9:
+        if opProdutoPedido == 9:
 
-        #     cursor = cnx.cursor()
-        #     print("\033[1;33m CARREGANDO.... \033[0;0m")
-        #     time.sleep(3)
+            cursor = cnx.cursor()
+            print("\033[1;33m CARREGANDO.... \033[0;0m")
+            time.sleep(3)
 
-        #     print('Quantos porcento os preços irão aumentar?')
-        #     aumento= input('--> ')
+            print('Quantos porcento os preços irão aumentar?')
+            aumento= float(input('--> '))
             
-        #     query ="Update FROM produto WHERE idPe = %s"
-        #     dados = (delPedido)
-        #     cursor.execute(query,dados)
-        #     cnx.commit()
+            query ='CALL aumento_produto(%s)'
+
+            cursor.execute(query,(aumento, ))
+            cnx.commit()
+            
+            print("\033[1;33m Preços aumentados com sucesso! \033[0;0m")
+            time.sleep(2)
         
-        # if opProdutoPedido == 10:
+        if opProdutoPedido == 10:
+            cursor = cnx.cursor()
+            print("\033[1;33m CARREGANDO.... \033[0;0m")
+            time.sleep(3)
+
+            print('Quantos porcento os preços irão diminuir?')
+            diminuir= float(input('--> '))
+            
+            query ='CALL diminuir_produto(%s)'
+
+            cursor.execute(query,(diminuir, ))
+            cnx.commit()
+            
+            print("\033[1;33m Preços diminuidos com sucesso! \033[0;0m")
+            time.sleep(2)
         
         if opProdutoPedido == 11:
             
@@ -270,65 +287,79 @@ def Conta():
             
             for (valor_total) in cursor:
                 print(f'{valor_total}')
+                
+            print("\033[1;33m Valor total mostrado! \033[0;0m")
+            time.sleep(2)
             
+        if opProdutoPedido == 12:
+            
+            print('Deseja finalizar o processo?')
+            op = input('(S/N) -->')
+            
+            if op == 'S' or op == 's':
+                break
+
+            if op == 'N' or op == 'n':
+                continue
+
+
+
+def Usuario():
+    while True: 
+        print("\033[1;32m =-=" * 8 + "\033[0;0m")
+        print("         BEM-VINDO AO ECOMMERCE")
+        print("\033[1;32m Já possui Login?" * 8 + "\033[0;0m")
+        print("\033[1;32m =-=" * 8 + "\033[0;0m")
+        opUserLog = int(input("  \033[1;32m[1]\033[0;0m - Criar conta"
+                                "\n  \033[1;32m[2]\033[0;0m - Entrar com login"
+                                "\n\n  \033[1;32m-->\033[0;0m "))
+
+        print("\033[1;32m =-=" * 8 + "\033[0;0m")
         
+        if opUserLog == 1:
+            cursor = cnx.cursor()
 
-
-
-# def Usuario():
-#     while True: 
-#         print("\033[1;32m =-=" * 8 + "\033[0;0m")
-#         print("         BEM-VINDO AO ECOMMERCE")
-#         print("\033[1;32m Já possui Login?" * 8 + "\033[0;0m")
-#         print("\033[1;32m =-=" * 8 + "\033[0;0m")
-#         opUserLog = int(input("  \033[1;32m[1]\033[0;0m - Criar conta"
-#                                 "\n  \033[1;32m[2]\033[0;0m - Entrar com login"
-#                                 "\n\n  \033[1;32m-->\033[0;0m "))
-
-#         print("\033[1;32m =-=" * 8 + "\033[0;0m")
-        
-#         if opUserLog == 1:
-#             cursor = cnx.cursor()
-
-#             print("\033[1;33m CARREGANDO.... \033[0;0m")
-#             time.sleep(6)
+            print("\033[1;33m CARREGANDO.... \033[0;0m")
+            time.sleep(4)
             
-#             print('Digite seu usuario:\n')
-#             user = input('--> ')
+            print('Digite seu usuario:\n')
+            user = input('--> ')
             
-#             time.sleep(2)
-#             print('Digite sua senha com no máximo 8 caracteres:\n') 
-#             password = input('-->')     
-#             password = password.encode()
-#             passCripted = bcrypt.hashpw(password,bcrypt.gensalt())
+            time.sleep(2)
+            print('Digite sua senha com no máximo 8 caracteres:\n') 
+            password = input('-->')     
+            # password = password.encode()
+            # passCripted = bcrypt.hashpw(password,bcrypt.gensalt())
             
-#             query = 'Insert into usuario values(null,%s,%s)'
-#             dados = (user,passCripted)
-#             cursor.execute(query,dados)
-#             cnx.commit()
-#             continue
+            query = 'Insert into usuario values(null,%s,%s)'
+            dados = (user,password)
+            cursor.execute(query,dados)
+            cnx.commit()
+            continue
             
-#         if opUserLog == 2:
-#             cursor = cnx.cursor()
-#             userUser = input('Digite seu usuario:')
-#             cursor.execute('select * from usuario')
+        if opUserLog == 2:
+            cursor = cnx.cursor()
+            userUser = input('Digite seu usuario: ')
+            senhaUser = input('Senha: ')
+            query = 'select * from usuario where userName= %s and senha=%s'
+            dados = (userUser,senhaUser)
+            cursor.execute(query,dados)
             
+            # print(len(cursor.fetchall()))
+            # for (id,user,password) in cursor.fetchall():
+               
             
-#             for (id,user,senha) in cursor.fetchall():
-#                 hashed = senha
-            
-#                 if userUser == user :
-#                     senhaUser = input('Senha: ')
-#                     if bcrypt.checkpw(senhaUser.encode(), hashed.encode()):
+            if len(cursor.fetchall()) :
+                  
+                        Conta()
+                        
+            else:
+                    print('Usuario não cadastrado')
+                    print("\033[1;33m CARREGANDO.... \033[0;0m")
+                    time.sleep(3)
+                    break
                     
-#                      Conta()
-#                 else:
-#                     print('Usuario não cadastrado')
-#                     print("\033[1;33m CARREGANDO.... \033[0;0m")
-#                     time.sleep(3)
-#                     break
-                    
 
         
         
-Conta()
+Usuario()

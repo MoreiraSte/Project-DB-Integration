@@ -1,3 +1,7 @@
+/* Armazenar o log sempre que: 
+um produto for cadastrado/excluído
+um pedido for criado/excluído /*
+
 - info_log pedido cadastrado trigger:
 
 	CREATE DEFINER = CURRENT_USER TRIGGER `stephany_moreira`.`pedido_AFTER_INSERT` AFTER INSERT ON `pedido` FOR EACH ROW
@@ -24,4 +28,36 @@ END
 	CREATE DEFINER=`root`@`%` TRIGGER `produto_BEFORE_DELETE` BEFORE DELETE ON `produto` FOR EACH ROW BEGIN
  delete from produto where idP = old.idP;
 	insert into Info_Log values(null,now(), (select concat(old.nome , ' ', old.qtd_estoque, ' ',old.preco)));
+END
+
+
+
+/*Quando um produto tiver sua quantidade zerada em estoque, devemos inserir um registro na 
+tabela lista_compras (data_registro, produto, quantidade, comprado (boolean)) para que se tenha o 
+controle e possa futuramente comprar o produto do fornecedor./*
+
+
+CREATE DEFINER=`root`@`%` PROCEDURE `registo_lista_compras`(idP int,idList int,qtd int, nome char)
+BEGIN
+	declare valor int;
+   set valor = qtd ;
+   if valor = 0 then
+		UPDATE list_compras SET produto=nome  WHERE idList = idList;
+	end if;
+END
+
+
+- aumentar preço produto
+
+CREATE DEFINER=`root`@`%` PROCEDURE `aumento_produto`(aumento float)
+BEGIN
+	update produto set preco = (preco * aumento) where idP != 0;
+END
+
+- diminuir preço produto
+
+CREATE DEFINER=`root`@`%` PROCEDURE `diminuir_produto`(diminuir float)
+BEGIN
+		update produto set preco = (preco / diminuir) where idP != 0;
+
 END
